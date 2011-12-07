@@ -73,7 +73,7 @@ pre code {
     padding: 0;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 748px) {
     body {
         width: 748px;
         margin:55px auto 10px auto;
@@ -89,6 +89,7 @@ header a, header a:hover {
 	font-weight: bold;
 	text-decoration: none;
 }
+header span { font-weight: normal; }
 #main { width: 600px; float: left; }
 #sidebar { width: 100px; float:right; }
 #sidebar a { color: #0050a3; text-decoration: none; text-transform: uppercase; }
