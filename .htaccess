@@ -1,0 +1,10 @@
+RewriteEngine on
+
+# Don't rewrite existing resources
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+
+# Rewrite to index.php
+RewriteRule ^.*$ index.php [NC,L]
