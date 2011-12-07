@@ -8,19 +8,15 @@ class ErrorPage {
 }
 
 class Page {
-	private $root;
 	private $request;
 	private $file;
-	private $is_post = false;
 	private $payload;
 	private $resp_code = 200;
 	
 	function __construct($request, $root = PAGE_DIR)
 	{
-		$this->root = $root;
 		if (empty($request)) $request = 'index';
 		$this->request = $request;
-		if ($root == POST_DIR) $this->is_post = true;
 		if (!file_exists($root.$request.'.md')) {
 			$request .= '/index';
 			if (!file_exists($root.$request.'.md')) {
@@ -29,23 +25,16 @@ class Page {
 			}
 		}
 		$this->resp_code = 200;
-		$this->load_file($root.$request.'.md');
+		$this->load_file($root.$request.'.md', ($root == POST_DIR));
 	}
 	
-	private function add_payload($item)
+	private function add_payload($matches)
 	{
-		if ($item[1] == 'tags') $this->payload['tags'] = explode(' ', $item[2]);
-		else $this->payload[$item[1]] = $item[2];
+		$key = strtolower(trim($matches[1]));
+		$value = trim($matches[2]);
+		if ($key == 'tags') $this->payload['tags'] = explode(' ', $value);
+		else $this->payload[$key] = $value;
 		return '';
-	}
-	
-	function load_file($filename)
-	{
-		$this->file = $filename;
-		$this->payload = array();
-		$raw = file_get_contents($filename);
-		$raw = preg_replace_callback('/{{(.*?):(.*?)}}/', array($this, 'add_payload'), $raw);
-		$this->payload['content'] = Markdown($raw);
 	}
 	
 	function get_payload()
@@ -53,15 +42,27 @@ class Page {
 		return $this->payload;
 	}
 	
+	function load_file($filename, $is_post = false)
+	{
+		$this->file = $filename;
+		$this->payload = array();
+		$raw = file_get_contents($filename);
+		$raw = preg_replace_callback('/{{(.*?):(.*?)}}/', array($this, 'add_payload'), $raw);
+		$this->payload['is_post'] = $is_post;
+		$this->payload['content'] = Markdown($raw);
+	}
+	
 	function render()
 	{
-		global $page_layout;
+		global $page_layout, $filter_tag, $filter_action;
 		if ($this->resp_code != 200) return ErrorPage::render($this->resp_code);
-		$layout = $page_layout;
+		if ($filter_action == 'hide' && in_array($filter_tag, $this->payload['tags']))
+			return ErrorPage::render(404);
 		if (isset($this->payload['layout'])) $layout = $this->payload['layout'];
+		else $layout = $page_layout;
 		$layout = file_get_contents(LAYOUT_DIR.$layout.'.html');
 		$m = new Mustache();
-		return $m->render($layout, array_merge($this->payload, array('is_post' => $this->is_post)));
+		return $m->render($layout, $this->payload);
 	}
 }
 
@@ -75,16 +76,17 @@ class BlogPage {
 	
 	function render()
 	{
-		global $blog_layout, $blog_slug;
+		global $blog_layout, $blog_slug, $filter_tag;
 		$layout = file_get_contents(LAYOUT_DIR.$blog_layout.'.html');
-		$payload = array('posts' => array());
+		$payload = array('posts' => array(), 'blog_filter' => $this->filter);
 		$page = new Page();
 		$handle = opendir(POST_DIR);
 		while (($file = readdir($handle))) {
 			if (strtolower(substr($file, strpos($file, '.'))) != '.md') continue;
-			$page->load_file(POST_DIR.$file);
+			$page->load_file(POST_DIR.$file, true);
 			$post = $page->get_payload();
-			if (empty($this->filter) || in_array($this->filter, $post['tags'])) {
+			if ( (empty($this->filter) || in_array($this->filter, $post['tags'])) &&
+					!in_array($filter_tag, $post['tags'])) {
 				$post['content'] = substr($post['content'], 0, strpos($post['content'], '</p>'));
 				$post['content'] .= '...<br /><a href="/'.$blog_slug.'/'.substr($file, 0, strpos($file, '.')).'" class="more">Read More</a></p>';
 				array_push($payload['posts'], $post);
@@ -92,6 +94,6 @@ class BlogPage {
 		}
 		$payload['posts'] = array_reverse($payload['posts']);
 		$m = new Mustache();
-		return $m->render($layout, array_merge($payload, array('blog_filter' => $this->filter)));
+		return $m->render($layout, $payload);
 	}
 }
