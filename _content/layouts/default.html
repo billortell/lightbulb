@@ -14,9 +14,9 @@
 	</header>
 	<div id="main">
 		{{#is_post}}
-			<h2>{{title}}</h2>
+			<h2>{{meta.title}}</h2>
 			<hr />
-			<p>Authored by {{author}} - {{#tags}}<a href="/blog/tag/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/tags}}</p>
+			<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="/blog/tag/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
 		{{/is_post}}
 		{{&content}}
 	</div>

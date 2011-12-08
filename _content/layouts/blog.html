@@ -16,8 +16,8 @@
 		<h2>Blog{{#blog_filter}} | #{{blog_filter}}{{/blog_filter}}</h2>
 		<hr />
 		{{#posts}}
-			<h3>{{title}}</h3>
-			<p>Authored by {{author}} - {{#tags}}<a href="/blog/tag/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/tags}}</p>
+			<h3>{{meta.title}}</h3>
+			<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="/blog/tag/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
 			{{&content}}
 		{{/posts}}
 	</div>

@@ -32,8 +32,8 @@ class Page {
 	{
 		$key = strtolower(trim($matches[1]));
 		$value = trim($matches[2]);
-		if ($key == 'tags') $this->payload['tags'] = explode(' ', $value);
-		else $this->payload[$key] = $value;
+		if ($key == 'tags') $this->payload['meta']['tags'] = explode(' ', $value);
+		else $this->payload['meta'][$key] = $value;
 		return '';
 	}
 	
@@ -45,7 +45,7 @@ class Page {
 	function load_file($filename, $is_post = false)
 	{
 		$this->file = $filename;
-		$this->payload = array();
+		$this->payload = array('meta' => array());
 		$raw = file_get_contents($filename);
 		$raw = preg_replace_callback('/{{(.*?):(.*?)}}/', array($this, 'add_payload'), $raw);
 		$this->payload['is_post'] = $is_post;
@@ -56,8 +56,8 @@ class Page {
 	{
 		global $page_layout;
 		if ($this->resp_code != 200) return ErrorPage::render($this->resp_code);
-		if (strtolower($this->payload['draft']) == 'hide') return ErrorPage::render(404);
-		if (isset($this->payload['layout'])) $layout = $this->payload['layout'];
+		if (strtolower($this->payload['meta']['draft']) == 'hide') return ErrorPage::render(404);
+		if (isset($this->payload['meta']['layout'])) $layout = $this->payload['meta']['layout'];
 		else $layout = $page_layout;
 		$layout = file_get_contents(LAYOUT_DIR.$layout.'.html');
 		$m = new Mustache();
@@ -84,7 +84,7 @@ class BlogPage {
 			if (strtolower(substr($file, strpos($file, '.'))) != '.md') continue;
 			$page->load_file(POST_DIR.$file, true);
 			$post = $page->get_payload();
-			if ((empty($this->filter) || in_array($this->filter, $post['tags'])) && !isset($post['draft'])) {
+			if ((empty($this->filter) || in_array($this->filter, $post['meta']['tags'])) && !isset($post['meta']['draft'])) {
 				$post['content'] = substr($post['content'], 0, strpos($post['content'], '</p>'));
 				$post['content'] .= '...<br /><a href="/'.$blog_slug.'/'.substr($file, 0, strpos($file, '.')).'" class="more">Read More</a></p>';
 				array_push($payload['posts'], $post);
