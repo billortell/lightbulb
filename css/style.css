@@ -80,7 +80,6 @@ pre code {
     }
 }
 
-.clear { clear: both; }
 header { padding-bottom: 20px; border-bottom: 1px solid #707070; margin-bottom: 20px; }
 header a, header a:hover {
 	color: #404040;
@@ -90,15 +89,16 @@ header a, header a:hover {
 	text-decoration: none;
 }
 header span { font-weight: normal; }
-#main { width: 600px; float: left; }
+#main { width: 600px; float: left; margin-bottom: 20px; }
 #sidebar { width: 100px; float:right; }
 #sidebar a { color: #0050a3; text-decoration: none; text-transform: uppercase; }
 #sidebar ul { list-style-type: none; padding: 0; margin: 0; }
 #sidebar li { margin: 0 0 .5em 0; }
 footer {
+	clear: both;
 	padding-top: 20px;
 	border-top: 1px solid #707070;
-	margin:5px 0 25px 0;
+	margin-bottom: 25px;
 	color: #999;
 	font-size: 12px;
 }
