@@ -6,26 +6,26 @@
 	<meta name="description" content="A sample website powered by Lightbulb" />
 	<meta name="author" content="Chris Frazier" />
 	<meta name="keywords" content="Lightbulb, CMS, Lightbulb CMS" />
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<link rel="stylesheet" type="text/css" href="{{site.root}}css/style.css">
 </head>
 <body>
 	<header>
-		<a href="/" title="Lightbulb"><span>Light</span>bulb</a>
+		<a href="{{site.root}}" title="Lightbulb"><span>Light</span>bulb</a>
 	</header>
 	<div id="main">
 		{{#is_post}}
 			<h2>{{meta.title}}</h2>
 			<hr />
-			<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="/blog/tag/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
+			<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="{{site.root}}{{site.blog}}/{{site.tag}}/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
 		{{/is_post}}
 		{{&content}}
 	</div>
 	<div id="sidebar">
 		<nav>
 			<ul>
-				<li><a href="/">Home</a></li>
-				<li><a href="/about">About</a></li>
-				<li><a href="/blog">Blog</a></li>
+				<li><a href="{{site.root}}">Home</a></li>
+				<li><a href="{{site.root}}about">About</a></li>
+				<li><a href="{{site.root}}{{site.blog}}">Blog</a></li>
 			</ul>
 		</nav>
 	</div>

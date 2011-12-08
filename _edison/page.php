@@ -7,7 +7,17 @@ class ErrorPage {
 	}
 }
 
-class Page {
+class BasePage {
+	function render($engine, $layout, $payload)
+	{
+		global $site_root, $blog_slug, $tag_slug;
+		return $engine->render($layout, array_merge($payload,
+			array('site' => array('root' => $site_root, 'blog' => $blog_slug, 'tag' => $tag_slug))
+			));
+	}
+}
+
+class Page extends BasePage {
 	private $request;
 	private $file;
 	private $payload;
@@ -61,11 +71,11 @@ class Page {
 		else $layout = $page_layout;
 		$layout = file_get_contents(LAYOUT_DIR.$layout.'.html');
 		$m = new Mustache();
-		return $m->render($layout, $this->payload);
+		return parent::render($m, $layout, $this->payload);
 	}
 }
 
-class BlogPage {
+class BlogPage extends BasePage {
 	private $filter;
 	
 	function __construct($filter = "")
@@ -92,6 +102,6 @@ class BlogPage {
 		}
 		$payload['posts'] = array_reverse($payload['posts']);
 		$m = new Mustache();
-		return $m->render($layout, $payload);
+		return parent::render($m, $layout, $payload);
 	}
 }
