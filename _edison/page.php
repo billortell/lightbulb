@@ -3,7 +3,8 @@
 class ErrorPage {
 	static function render($error_code)
 	{
-		return file_get_contents(CODE_DIR.'res/'.$error_code.'.html');
+		global $site_root;
+		include CODE_DIR.'res/'.$error_code.'.php';
 	}
 }
 
@@ -85,7 +86,7 @@ class BlogPage extends BasePage {
 	
 	function render()
 	{
-		global $blog_layout, $blog_slug;
+		global $site_root, $blog_layout, $blog_slug;
 		$layout = file_get_contents(LAYOUT_DIR.$blog_layout.'.html');
 		$payload = array('posts' => array(), 'blog_filter' => $this->filter);
 		$page = new Page();
@@ -96,7 +97,7 @@ class BlogPage extends BasePage {
 			$post = $page->get_payload();
 			if ((empty($this->filter) || in_array($this->filter, $post['meta']['tags'])) && !isset($post['meta']['draft'])) {
 				$post['content'] = substr($post['content'], 0, strpos($post['content'], '</p>'));
-				$post['content'] .= '...<br /><a href="/'.$blog_slug.'/'.substr($file, 0, strpos($file, '.')).'" class="more">Read More</a></p>';
+				$post['content'] .= '...<br /><a href="'.$site_root.$blog_slug.'/'.substr($file, 0, strpos($file, '.')).'" class="more">Read More</a></p>';
 				array_push($payload['posts'], $post);
 			}
 		}

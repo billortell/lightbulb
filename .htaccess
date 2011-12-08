@@ -1,5 +1,8 @@
 RewriteEngine on
 
+# If you're running from a sub-directory...
+# RewriteBase /lightbulb
+
 # Don't rewrite existing resources
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]

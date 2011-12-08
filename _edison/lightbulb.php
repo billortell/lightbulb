@@ -10,7 +10,7 @@ if (isset($_SERVER['IIS_WasUrlRewritten']) && $_SERVER['IIS_WasUrlRewritten'] ==
 
 if (($question_mark = strpos($requestURI, '?')) == true)
 	$requestURI = substr($requestURI, 0, $question_mark);
-$requestURI = ltrim($requestURI, '/');
+$requestURI = ltrim($requestURI, $site_root);
 
 $blog_requested = false;
 $tag_requested  = false;

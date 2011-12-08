@@ -12,7 +12,7 @@
 	</style>
 </head>
 <body>
-	<img src="/_edison/res/warning.png" alt="404">
+	<img src="<?php echo $site_root; ?>_edison/res/warning.png" alt="404">
 	<h1>We're sorry...</h1>
 	<p>The page you are looking for cannot be found.</p>
 	<p><a href="/">Return to the Homepage</a></p>
