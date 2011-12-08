@@ -8,4 +8,4 @@ $site_root = '/';
 $page_layout = 'default';
 $blog_slug   = 'blog';
 $tag_slug    = 'tag';
-$blog_layout = 'blog';
+$blog_layout = 'default';

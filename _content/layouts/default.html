@@ -13,12 +13,24 @@
 		<a href="{{site.root}}" title="Lightbulb"><span>Light</span>bulb</a>
 	</header>
 	<div id="main">
-		{{#is_post}}
-			<h2>{{meta.title}}</h2>
+		{{^is_blog}}
+			{{#is_post}}
+				<h2>{{meta.title}}</h2>
+				<hr />
+				<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="{{site.root}}{{site.blog}}/{{site.tag}}/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
+			{{/is_post}}
+			{{&content}}
+		{{/is_blog}}
+		
+		{{#is_blog}}
+			<h2>Blog{{#blog_filter}} | #{{blog_filter}}{{/blog_filter}}</h2>
 			<hr />
-			<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="{{site.root}}{{site.blog}}/{{site.tag}}/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
-		{{/is_post}}
-		{{&content}}
+			{{#posts}}
+				<h3>{{meta.title}}</h3>
+				<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="{{site.root}}{{site.blog}}/{{site.tag}}/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
+				{{&content}}
+			{{/posts}}
+		{{/is_blog}}
 	</div>
 	<div id="sidebar">
 		<nav>

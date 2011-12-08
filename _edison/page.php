@@ -88,7 +88,7 @@ class BlogPage extends BasePage {
 	{
 		global $site_root, $blog_layout, $blog_slug;
 		$layout = file_get_contents(LAYOUT_DIR.$blog_layout.'.html');
-		$payload = array('posts' => array(), 'blog_filter' => $this->filter);
+		$payload = array('is_blog' => true, 'posts' => array(), 'blog_filter' => $this->filter);
 		$page = new Page();
 		$handle = opendir(POST_DIR);
 		while (($file = readdir($handle))) {
