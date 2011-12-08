@@ -54,10 +54,9 @@ class Page {
 	
 	function render()
 	{
-		global $page_layout, $filter_tag, $filter_action;
+		global $page_layout;
 		if ($this->resp_code != 200) return ErrorPage::render($this->resp_code);
-		if ($filter_action == 'hide' && in_array($filter_tag, $this->payload['tags']))
-			return ErrorPage::render(404);
+		if (strtolower($this->payload['draft']) == 'hide') return ErrorPage::render(404);
 		if (isset($this->payload['layout'])) $layout = $this->payload['layout'];
 		else $layout = $page_layout;
 		$layout = file_get_contents(LAYOUT_DIR.$layout.'.html');
@@ -76,7 +75,7 @@ class BlogPage {
 	
 	function render()
 	{
-		global $blog_layout, $blog_slug, $filter_tag;
+		global $blog_layout, $blog_slug;
 		$layout = file_get_contents(LAYOUT_DIR.$blog_layout.'.html');
 		$payload = array('posts' => array(), 'blog_filter' => $this->filter);
 		$page = new Page();
@@ -85,8 +84,7 @@ class BlogPage {
 			if (strtolower(substr($file, strpos($file, '.'))) != '.md') continue;
 			$page->load_file(POST_DIR.$file, true);
 			$post = $page->get_payload();
-			if ( (empty($this->filter) || in_array($this->filter, $post['tags'])) &&
-					!in_array($filter_tag, $post['tags'])) {
+			if ((empty($this->filter) || in_array($this->filter, $post['tags'])) && !isset($post['draft'])) {
 				$post['content'] = substr($post['content'], 0, strpos($post['content'], '</p>'));
 				$post['content'] .= '...<br /><a href="/'.$blog_slug.'/'.substr($file, 0, strpos($file, '.')).'" class="more">Read More</a></p>';
 				array_push($payload['posts'], $post);
