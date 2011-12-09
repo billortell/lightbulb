@@ -12,3 +12,6 @@ $page_layout = 'default';
 $blog_slug   = 'blog';
 $tag_slug    = 'tag';
 $blog_layout = 'default';
+
+$enable_pagination = false;
+$posts_per_page = 10;

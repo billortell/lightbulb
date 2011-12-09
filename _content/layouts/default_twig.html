@@ -30,6 +30,14 @@
 				<p>Authored by {{ post.meta.author }} - {% for tag in post.meta.tags %}<a href="{{ site.root }}{{ site.blog }}/{{ site.tag }}/{{ tag }}">#{{ tag }}</a>&nbsp;&nbsp;&nbsp;{% endfor %}</p>
 				{{ post.content|raw }}
 			{% endfor %}
+			
+			{% if site.pagination %}
+				<p style="margin: 0; padding-top: 10px; float: right;">Pages:
+					{% for page in prev_pages %}<a href="{{ site.root }}{{ site.blog }}/{% if blog_filter %}{{ site.tag }}/{{ blog_filter }}/{% endif %}{{ page }}">{{ page }}</a> {% endfor %}
+					{{ cur_page }}
+					{% for page in next_pages %}<a href="{{ site.root }}{{ site.blog }}/{% if blog_filter %}{{ site.tag }}/{{ blog_filter }}/{% endif %}{{ page }}">{{ page }}</a> {% endfor %}
+				</p>
+			{% endif %}
 		{% endif %}
 	</div>
 	<div id="sidebar">

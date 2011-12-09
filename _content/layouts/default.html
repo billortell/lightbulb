@@ -30,6 +30,14 @@
 				<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="{{site.root}}{{site.blog}}/{{site.tag}}/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
 				{{&content}}
 			{{/posts}}
+			
+			{{#site.pagination}}
+				<p style="margin: 0; padding-top: 10px; float: right;">Pages:
+					{{#prev_pages}}<a href="{{site.root}}{{site.blog}}/{{#blog_filter}}{{site.tag}}/{{blog_filter}}/{{/blog_filter}}{{.}}">{{.}}</a> {{/prev_pages}}
+					{{cur_page}}
+					{{#next_pages}}<a href="{{site.root}}{{site.blog}}/{{#blog_filter}}{{site.tag}}/{{blog_filter}}/{{/blog_filter}}{{.}}">{{.}}</a> {{/next_pages}}
+				</p>
+			{{/site.pagination}}
 		{{/is_blog}}
 	</div>
 	<div id="sidebar">
