@@ -1,6 +1,6 @@
 <?php
 
-$version = '0.4.0';
+$version = '0.5.0';
 
 // the trailing slash is required!
 $site_root = '/';
