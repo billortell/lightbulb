@@ -2,10 +2,10 @@
 
 $version = '0.4.0';
 
-# the trailing slash is required!
+// the trailing slash is required!
 $site_root = '/';
 
-# Lightbulb supports 'mustache' and 'twig' template engines
+// Lightbulb supports 'mustache' and 'twig' template engines
 $template_engine = 'mustache';
 
 $page_layout = 'default';
