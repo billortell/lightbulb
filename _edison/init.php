@@ -24,8 +24,9 @@ define("PAGE_DIR", ROOT_DIR.'_content/pages/');
 define("POST_DIR", ROOT_DIR.'_content/posts/');
 define("LAYOUT_DIR", ROOT_DIR.'_content/layouts/');
 
-require_once CODE_DIR.'ext/markdown/markdown.php';
-require_once CODE_DIR.'ext/mustache/mustache.php';
 require_once CODE_DIR.'config.php';
+if ($template_engine == 'mustache') require_once CODE_DIR.'ext/mustache/mustache.php';
+elseif ($template_engine == 'twig') require_once CODE_DIR.'ext/twig/lib/Twig/Autoloader.php';
+require_once CODE_DIR.'ext/markdown/markdown.php';
 require_once CODE_DIR.'page.php';
 require_once CODE_DIR.'lightbulb.php';

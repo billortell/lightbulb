@@ -9,9 +9,19 @@ class ErrorPage {
 }
 
 class BasePage {
-	function render($engine, $layout, $payload)
+	function render($layout, $payload)
 	{
-		global $site_root, $blog_slug, $tag_slug;
+		global $site_root, $blog_slug, $tag_slug, $template_engine;
+		if ($template_engine == 'mustache') {
+			$engine = new Mustache();
+			$layout = file_get_contents(LAYOUT_DIR.$layout.'.html');
+		} elseif ($template_engine == 'twig') {
+			Twig_Autoloader::register();
+			$engine = new Twig_Environment(new Twig_Loader_Filesystem(LAYOUT_DIR));
+			$layout .= '.html';
+		} else {
+			return ErrorPage::render(500);
+		}
 		return $engine->render($layout, array_merge($payload,
 			array('site' => array('root' => $site_root, 'blog' => $blog_slug, 'tag' => $tag_slug))
 			));
@@ -70,9 +80,7 @@ class Page extends BasePage {
 		if (strtolower($this->payload['meta']['draft']) == 'hide') return ErrorPage::render(404);
 		if (isset($this->payload['meta']['layout'])) $layout = $this->payload['meta']['layout'];
 		else $layout = $page_layout;
-		$layout = file_get_contents(LAYOUT_DIR.$layout.'.html');
-		$m = new Mustache();
-		return parent::render($m, $layout, $this->payload);
+		return parent::render($layout, $this->payload);
 	}
 }
 
@@ -87,7 +95,6 @@ class BlogPage extends BasePage {
 	function render()
 	{
 		global $site_root, $blog_layout, $blog_slug;
-		$layout = file_get_contents(LAYOUT_DIR.$blog_layout.'.html');
 		$payload = array('is_blog' => true, 'posts' => array(), 'blog_filter' => $this->filter);
 		$page = new Page();
 		$handle = opendir(POST_DIR);
@@ -102,7 +109,6 @@ class BlogPage extends BasePage {
 			}
 		}
 		$payload['posts'] = array_reverse($payload['posts']);
-		$m = new Mustache();
-		return parent::render($m, $layout, $payload);
+		return parent::render($blog_layout, $payload);
 	}
 }

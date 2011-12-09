@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Your New Lightbulb Website</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="A sample website powered by Lightbulb" />
+	<meta name="author" content="Chris Frazier" />
+	<meta name="keywords" content="Lightbulb, CMS, Lightbulb CMS" />
+	<link rel="stylesheet" type="text/css" href="{{ site.root }}css/style.css">
+</head>
+<body>
+	<header>
+		<a href="{{ site.root }}" title="Lightbulb"><span>Light</span>bulb</a>
+	</header>
+	<div id="main">
+		{% if not is_blog %}
+			{% if is_post %}
+				<h2>{{ meta.title }}</h2>
+				<hr />
+				<p>Authored by {{ meta.author }} - {% for tag in meta.tags %}<a href="{{ site.root }}{{ site.blog }}/{{ site.tag }}/{{ tag }}">#{{ tag }}</a>&nbsp;&nbsp;&nbsp;{% endfor %}</p>
+			{% endif %}
+			{{ content|raw }}
+		{% endif %}
+		
+		{% if is_blog %}
+			<h2>Blog{% if blog_filter %} | #{{ blog_filter }}{% endif %}</h2>
+			<hr />
+			{% for post in posts %}
+				<h3>{{ post.meta.title }}</h3>
+				<p>Authored by {{ post.meta.author }} - {% for tag in post.meta.tags %}<a href="{{ site.root }}{{ site.blog }}/{{ site.tag }}/{{ tag }}">#{{ tag }}</a>&nbsp;&nbsp;&nbsp;{% endfor %}</p>
+				{{ post.content|raw }}
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div id="sidebar">
+		<nav>
+			<ul>
+				<li><a href="{{ site.root }}">Home</a></li>
+				<li><a href="{{ site.root }}about">About</a></li>
+				<li><a href="{{ site.root }}{{ site.blog }}">Blog</a></li>
+			</ul>
+		</nav>
+	</div>
+	<footer>
+		<p>Powered by Lightbulb - Copyright <a href="http://chrisfrazier.me">Chris Frazier</a> &copy; 2011 - All Rights Reserved</p>
+	</footer>
+</body>
+</html>
