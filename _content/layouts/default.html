@@ -6,46 +6,46 @@
 	<meta name="description" content="A sample website powered by Lightbulb" />
 	<meta name="author" content="Chris Frazier" />
 	<meta name="keywords" content="Lightbulb, CMS, Lightbulb CMS" />
-	<link rel="stylesheet" type="text/css" href="{{site.root}}css/style.css">
+	<link rel="stylesheet" type="text/css" href="{{ site.root }}css/style.css">
 </head>
 <body>
 	<header>
-		<a href="{{site.root}}" title="Lightbulb"><span>Light</span>bulb</a>
+		<a href="{{ site.root }}" title="Lightbulb"><span>Light</span>bulb</a>
 	</header>
 	<div id="main">
-		{{^is_blog}}
-			{{#is_post}}
-				<h2>{{meta.title}}</h2>
+		{% if not is_blog %}
+			{% if is_post %}
+				<h2>{{ meta.title }}</h2>
 				<hr />
-				<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="{{site.root}}{{site.blog}}/{{site.tag}}/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
-			{{/is_post}}
-			{{&content}}
-		{{/is_blog}}
+				<p>Authored by {{ meta.author }} - {% for tag in meta.tags %}<a href="{{ site.root }}{{ site.blog }}/{{ site.tag }}/{{ tag }}">#{{ tag }}</a>&nbsp;&nbsp;&nbsp;{% endfor %}</p>
+			{% endif %}
+			{{ content|raw }}
+		{% endif %}
 		
-		{{#is_blog}}
-			<h2>Blog{{#blog_filter}} | #{{blog_filter}}{{/blog_filter}}</h2>
+		{% if is_blog %}
+			<h2>Blog{% if blog_filter %} | #{{ blog_filter }}{% endif %}</h2>
 			<hr />
-			{{#posts}}
-				<h3>{{meta.title}}</h3>
-				<p>Authored by {{meta.author}} - {{#meta.tags}}<a href="{{site.root}}{{site.blog}}/{{site.tag}}/{{.}}">#{{.}}</a>&nbsp;&nbsp;&nbsp;{{/meta.tags}}</p>
-				{{&content}}
-			{{/posts}}
+			{% for post in posts %}
+				<h3>{{ post.meta.title }}</h3>
+				<p>Authored by {{ post.meta.author }} - {% for tag in post.meta.tags %}<a href="{{ site.root }}{{ site.blog }}/{{ site.tag }}/{{ tag }}">#{{ tag }}</a>&nbsp;&nbsp;&nbsp;{% endfor %}</p>
+				{{ post.content|raw }}
+			{% endfor %}
 			
-			{{#site.pagination}}
+			{% if site.pagination %}
 				<p style="margin: 0; padding-top: 10px; float: right;">Pages:
-					{{#prev_pages}}<a href="{{site.root}}{{site.blog}}/{{#blog_filter}}{{site.tag}}/{{blog_filter}}/{{/blog_filter}}{{.}}">{{.}}</a> {{/prev_pages}}
-					{{cur_page}}
-					{{#next_pages}}<a href="{{site.root}}{{site.blog}}/{{#blog_filter}}{{site.tag}}/{{blog_filter}}/{{/blog_filter}}{{.}}">{{.}}</a> {{/next_pages}}
+					{% for page in prev_pages %}<a href="{{ site.root }}{{ site.blog }}/{% if blog_filter %}{{ site.tag }}/{{ blog_filter }}/{% endif %}{{ page }}">{{ page }}</a> {% endfor %}
+					{{ cur_page }}
+					{% for page in next_pages %}<a href="{{ site.root }}{{ site.blog }}/{% if blog_filter %}{{ site.tag }}/{{ blog_filter }}/{% endif %}{{ page }}">{{ page }}</a> {% endfor %}
 				</p>
-			{{/site.pagination}}
-		{{/is_blog}}
+			{% endif %}
+		{% endif %}
 	</div>
 	<div id="sidebar">
 		<nav>
 			<ul>
-				<li><a href="{{site.root}}">Home</a></li>
-				<li><a href="{{site.root}}about">About</a></li>
-				<li><a href="{{site.root}}{{site.blog}}">Blog</a></li>
+				<li><a href="{{ site.root }}">Home</a></li>
+				<li><a href="{{ site.root }}about">About</a></li>
+				<li><a href="{{ site.root }}{{ site.blog }}">Blog</a></li>
 			</ul>
 		</nav>
 	</div>

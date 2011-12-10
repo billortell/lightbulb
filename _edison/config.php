@@ -6,7 +6,7 @@ $version = '0.5.0';
 $site_root = '/';
 
 // Lightbulb supports 'mustache' and 'twig' template engines
-$template_engine = 'mustache';
+$template_engine = 'twig';
 
 $page_layout = 'default';
 $blog_slug   = 'blog';
