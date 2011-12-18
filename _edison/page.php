@@ -114,7 +114,7 @@ class BlogPage extends BasePage {
 			}
 		}
 		$posts = array_reverse($posts);
-		if (strlen($this->filter) > 0 && count($posts) == 0) return ErrorPage::render(404);
+		if (count($posts) == 0) return ErrorPage::render(404);
 		
 		if ($enable_pagination) {
 			$posts = array_chunk($posts, $posts_per_page);
